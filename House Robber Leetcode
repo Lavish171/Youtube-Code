@@ -1,0 +1,38 @@
+House Robber Leetcode
+Question Link:- https://leetcode.com/problems/house-robber/
+
+
+Soln 1 using only recursion :-
+ class Solution {
+    public int rob(int[] nums) {
+    return max(nums,0);
+    }
+    
+    public static int max(int []nums,int i)
+    {
+        if(i>=nums.length) return 0;
+        return  Math.max(nums[i]+max(nums,i+2),max(nums,i+1));
+    }
+}   
+//Time comp -> 0( 2n) and space comp - 0(n)
+----------------------------------------------------------------------------------------------------
+Soln 2  using only recursion with Memozation :- 
+
+ class Solution {
+    public int rob(int[] nums) {
+    int memo[]=new int[nums.length];
+    Arrays.fill(memo,-1);
+    return max(nums,0,memo);    
+    }
+     public static int max(int []nums,int i,int memo[])
+    {  
+        if(i>=nums.length) return 0;
+        if(memo[i]>=0) return memo[i];
+        int result= Math.max(nums[i]+max(nums,i+2,memo),max(nums,i+1,memo));
+        memo[i]=result;
+        return result;
+    }
+    
+}
+//Time complexity - 0(n) and space Complexity - 0(n)
+
