@@ -1,0 +1,104 @@
+Java Code 👇👇✨
+class Solution {
+    public boolean checkValidString(String s) {    
+    int len=s.length();
+    if(s==null || len==0) return true; //for corner cases
+    if(len==1) if(s.charAt(0)!='*') return false; //for corner cases
+        
+    Stack<Integer> brack=new Stack<>(); //for open and close brackets
+    Stack<Integer> star=new Stack<>();
+    for(int i=0;i<len;i++)
+    {
+        char temp=s.charAt(i);
+        if(temp=='(') brack.push(i);  //if encountered the opening brack ,push it into the stack
+        else if(temp==')')
+        {
+         if(brack.size()==0 && star.size()==0) return false;
+         else if(brack.size()>0) brack.pop(); //if stack is not empty,pop out the element
+            
+         else if(star.size()>0)  //if brac stack is not empty,see the position of the star to balance )
+         {
+             if(star.peek()<i) star.pop();//pop the star ,so that it can balance )
+             
+             else return false; ////if no star occurs before the ) return false
+         }
+        }
+        else if(temp=='*')   //if encountred * push it into the star stack
+        {
+            star.push(i);
+        }
+    }//for loop ends
+        if(brack.size()==0) return true;   //if brack stack is empty after the string traversal return true
+        
+        else if(brack.size()>0 && star.size()==0) return false;//if star stack is empty,& brack stack not return false
+        else if(brack.size()>0 && star.size()>0)
+        {
+        if(star.size()<brack.size()) return false;//after string iteration if no of star is less then no                       //brackets,return false
+        while(!brack.isEmpty())
+        {
+            if(star.isEmpty()) return false;
+            
+            if(star.size()<brack.size()) return false;
+            char temp=s.charAt(brack.peek());
+            if(temp=='(')
+            {
+            if(star.peek()>brack.peek()){ brack.pop(); star.pop();} //for ( star should occur after it to balance it
+                
+            else return false;
+            }
+            else  if(temp==')')
+            {
+                
+            if(star.peek()<brack.peek()){ brack.pop(); star.pop();}//for ) star should  occur before it to balance it
+                
+            else return false;
+            }
+        }
+        }
+        return brack.size()==0;  //last check whther our brack stack is empty or not
+    }
+}
+
+
+👉👉✨✨👇C++ Code 
+ 
+ class Solution {
+public:
+    bool checkValidString(string s) {
+        
+        stack<int> open,star;
+        int len = s.length();
+        
+        for(int i=0;s[i]!='\0';++i)
+        {
+            if(s[i]=='(')
+                open.push(i);
+            else if(s[i]=='*')
+                star.push(i);
+            else
+            {
+                if(!open.empty())
+                    open.pop();
+                else if(!star.empty())
+                    star.pop();
+                else
+                    return false;
+            }
+        }
+        
+        //Now process leftover opening brackets
+        while(!open.empty())
+        {
+            if(star.empty())
+                return false;
+            else if(open.top() < star.top())
+            {
+                open.pop();
+                star.pop();
+            }
+            else    //CASE: open.top() > star.top()
+                return false;
+        }
+        return true;
+    }
+};
