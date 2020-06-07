@@ -1,0 +1,71 @@
+✨✨✨C++ Code is below Java Code 👈👈👈👈
+
+✨✨👉Java Code👇 :-
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+      if(nums==null || k<=0) return new int[0];
+        int n=nums.length, index=0;
+        int outputarray[]=new int[n-k+1];//output array  of size n-k+1(equal to total no of windows)
+            Deque<Integer> dq=new ArrayDeque<>();
+            for(int i=0;i<n;i++)
+            {
+                //maximum size of the window can be i-k+1
+               //removing the elements out of the range 
+                while(!dq.isEmpty() && dq.peek()<i-k+1)
+                {
+                    dq.poll();//removing unnecessary elements
+                }
+                //removing the elements in the same window ,ie are less then the coming elements
+                while(!dq.isEmpty() && nums[i]>nums[dq.peekLast()]) {
+                    //making sure that greater element index do not have any smaller element index behind it
+                    dq.pollLast();
+                }
+                dq.offer(i); //now performing above procedure add the element into the deque
+                
+                //at the end of each window ,we are storing the elements into the array removing
+                //the useless elements 
+                if(i>=k-1)  outputarray[index++]=nums[dq.peek()];//getting the front of the deque and adding it to output array
+            }
+        return outputarray;
+        }
+}
+
+✨✨👉👇C++ Code
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        int n=nums.size();
+        //Check for Empty Input
+        if(n==0 || n<k){
+            return {};
+        }
+        //Here using double ended queue with atmost size equal to k
+        deque<int> q;
+        //Result Array Storing the output with size of (n-k+1)
+        vector<int> ans(n-k+1);
+        for(int i=0;i<n;i++){
+            /* Here Idea is that to remove all smaller elements that comes before any
+                larger element in present window.
+                Here, We are not removing any smaller element that comes after larger element
+				because it may become larger element for another window.
+            */
+            while(!q.empty() && nums[q.back()]<=nums[i]){
+                q.pop_back();
+            }
+            // pushing new elements in queue
+            q.push_back(i);
+            //Storing Maximum element in result
+            if(i>=k-1){
+                // Here Always larger element will on the front of queue
+                ans[i-k+1]=nums[q.front()];
+                // if any element is out of the context of current window, remove it
+                if(q.front()==i-k+1){
+                    q.pop_front();
+                }
+            }
+        }
+        return ans;
+        
+    }
+};
